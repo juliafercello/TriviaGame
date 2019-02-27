@@ -30,25 +30,26 @@
       <div class="col-sm-6">
         <div class="card">
           <div class="card-body" id="questionDiv">
-            <div class="card-text text-info" id = "showTimer"></div>
+            <h5 class="card-text text-info" id = "showTimer"></h5>
             <h5 class="card-title" id="theQuestion">How well do you know 90210?</h5>
             <p class="card-text" id="helpText">Test your knowledge of this 90s classic!</p>
             <a href="#" class="btn btn-info startGame">Start</a>
+            <div class="card-text text-info" id = "gameOverDiv"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
-<!-- Modal -->
 
+  <!-- Modal -->
 <div class="modal fade" id="showAnswerModal" tabindex="-1" role="dialog" aria-labelledby="showAnswer" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="showAnswer">Modal title</h5>
         </div>
-        <div class="modal-body" id="answerInfo">
-        </div>
+        <img src="" alt="90210" class="img-fluid" id="answerPic">
+        <div class="modal-body" id="answerInfo"></div>
       </div>
     </div>
   </div>
