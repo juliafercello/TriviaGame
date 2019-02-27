@@ -19,12 +19,12 @@ var triviaGame = {
     }, {
         question: "Where did Brandon work in high school?",
         choices: ["The Library", "The Peach Pit", "The Max", "Starbucks"],
-        answer: "The Peach Pit",       
+        answer: "The Peach Pit",
         image: "assets/images/peachpit.jpg"
     }, {
         question: "Whose parents got married?",
-        choices: ["Dylan's Dad and Kelly's Mom", "Donna's Mom and Brandon's Dad", "David's Dad and Kelly's Mom", "Brenda's Mom and Brandon's Dad"],
-        answer: "David's Dad and Kelly's Mom",
+        choices: ["Dylan's dad and Kelly's mom", "Donna's mom and Brandon's dad", "David's dad and Kelly's mom", "Brenda's mom and Brandon's dad"],
+        answer: "David's dad and Kelly's mom",
         image: "assets/images/parentswed.png"
     }, {
         question: "Which character almost didn't get to graduate?",
@@ -37,7 +37,7 @@ var triviaGame = {
         answer: "Andrea",
         image: "assets/images/andrea.jpeg"
     }, {
-        question: "What was Dylan's Mom's name?",
+        question: "What was Dylan's mom's name?",
         choices: ["Iris", "Cindy", "Samantha", "Felice"],
         answer: "Iris",
         image: "assets/images/iris.jpg"
@@ -49,8 +49,9 @@ var triviaGame = {
     }
     ],
 
+    //Reset counters/page text and call to ask the first question
     startTheGame: function () {
-        triviaGame.theClock = 10; 
+        triviaGame.theClock = 10;
         triviaGame.questionIndex = 0;
         triviaGame.correct = 0;
         triviaGame.incorrect = 0;
@@ -66,48 +67,49 @@ var triviaGame = {
         //Hide the modal if open and remove previous answers 
         $("#showAnswerModal").modal('hide');
         $(".guess").remove();
-        triviaGame.theClock = 10; 
-        
+        triviaGame.theClock = 10;
+
         //Check to see if the game is over 
         if (triviaGame.questionIndex < triviaGame.questions.length) {
-                
-                //Display the question
-                $("#showTimer").text("Time left: " + triviaGame.theClock);
-                $("#theQuestion").text(triviaGame.questions[triviaGame.questionIndex].question);
 
-                            
-                //Display the answers
-                for (var i = 0; i < triviaGame.questions[triviaGame.questionIndex].choices.length; i++) {
-                    var choice = $("<a>").text(triviaGame.questions[triviaGame.questionIndex].choices[i]);
-                    choice.attr("class", "btn btn-info m-2 text-white guess");
-                    choice.attr("data-guess", triviaGame.questions[triviaGame.questionIndex].choices[i])
-                    choice.appendTo($("#questionDiv"));
-                }
+            //Game is not over 
+            //Display the question
+            $("#showTimer").text("Time left: " + triviaGame.theClock);
+            $("#theQuestion").text(triviaGame.questions[triviaGame.questionIndex].question);
 
-                //User has 10 seconds to answer the question
-                var missed = "missed";
-                triviaGame.answerTimeout = setTimeout(triviaGame.showTheAnswer, 10000, missed);
-                triviaGame.answerInterval = setInterval(triviaGame.countdown, 1000); 
-            
-                //Wait for their guess
-                $(".guess").on("click", function () {
-                    clearTimeout(triviaGame.answerTimeout);
-                    clearInterval(triviaGame.answerInterval);
-                    var theirAnswer = $(this).attr("data-guess");
-                    //console.log(theirAnswer); 
-                    triviaGame.checkTheAnswer(theirAnswer);
-                });
+            //Display the answers
+            for (var i = 0; i < triviaGame.questions[triviaGame.questionIndex].choices.length; i++) {
+                var choice = $("<a>").text(triviaGame.questions[triviaGame.questionIndex].choices[i]);
+                choice.attr("class", "btn btn-info m-2 text-white guess");
+                choice.attr("data-guess", triviaGame.questions[triviaGame.questionIndex].choices[i])
+                choice.appendTo($("#questionDiv"));
             }
-            
+
+            //User has 10 seconds to answer the question
+            var missed = "Time's Up!";
+            triviaGame.answerTimeout = setTimeout(triviaGame.showTheAnswer, 10000, missed);
+            triviaGame.answerInterval = setInterval(triviaGame.countdown, 1000);
+
+            //Wait for their guess
+            $(".guess").on("click", function () {
+                clearTimeout(triviaGame.answerTimeout);
+                clearInterval(triviaGame.answerInterval);
+                var theirAnswer = $(this).attr("data-guess");
+                //console.log(theirAnswer); 
+                triviaGame.checkTheAnswer(theirAnswer);
+            });
+        }
+
+        //Game is over
         else {
-            triviaGame.gameOver(); 
+            triviaGame.gameOver();
         }
     },
 
-    //Show a timer of the time remaining
-    countdown: function() {
-        triviaGame.theClock--; 
-       // console.log("current Time: "+ triviaGame.theClock)
+    //Show a countdown of time remaining 
+    countdown: function () {
+        triviaGame.theClock--;
+        // console.log("current Time: "+ triviaGame.theClock)
         $("#showTimer").text("Time left: " + triviaGame.theClock);
     },
 
@@ -117,24 +119,22 @@ var triviaGame = {
         var answerMessage = "";
         if (guess === triviaGame.questions[triviaGame.questionIndex].answer) {
             triviaGame.correct++;
-            $("#showAnswer").text("Yay! You're right!!");
-            answerMessage = "correct";
+            answerMessage = "Yay! You're right!!";
         }
         else {
             triviaGame.incorrect++;
-            $("#showAnswer").text("Wrong!!");
-            answerMessage = "incorrect";
+            answerMessage = "Wrong!!";
         }
         triviaGame.showTheAnswer(answerMessage);
     },
 
     //Show the answer to the user and messaging for if they were right, wrong or missed the question
-    showTheAnswer: function(message) {
+    showTheAnswer: function (message) {
         clearInterval(triviaGame.answerInterval);
-        if (message === "missed") {
+        if (message === "Time's Up!") {
             triviaGame.missed++;
-            $("#showAnswer").text("Time's Up!");
         }
+        $("#showAnswer").text(message);
         $("#answerInfo").text("Answer: " + triviaGame.questions[triviaGame.questionIndex].answer);
         $("#answerPic").attr("src", triviaGame.questions[triviaGame.questionIndex].image);
         $("#showAnswerModal").modal('show');
@@ -143,7 +143,7 @@ var triviaGame = {
     },
 
     //game over
-    gameOver: function() {
+    gameOver: function () {
         $("#showTimer").empty();
         $("#theQuestion").empty();
 
@@ -157,7 +157,7 @@ var triviaGame = {
         reset.attr("class", "btn btn-info m-2 text-white reset");
         reset.appendTo($("#gameOverDiv"));
     }
-    
+
 }
 
 //Play the Game!!
